@@ -1,0 +1,111 @@
+//Team 7
+
+//1. Count three-letter words
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
+public class CountThreeLetterWords {
+    public static void main(String[] args) {
+        String fileName = "sample.txt";
+
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(fileName));
+            String line;
+            int count = 0;
+
+            while ((line = br.readLine()) != null) {
+                String[] words = line.split("\\s+");
+
+                for (String word : words) {
+                    word = word.replaceAll("[^a-zA-Z]", "");
+
+                    if (word.length() == 3) {
+                        count++;
+                    }
+                }
+            }
+
+            br.close();
+
+            System.out.println("Number of three-letter words: " + count);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+
+//2. Perform operations on a file
+
+import java.io.File;
+
+public class FileInfo {
+    public static void main(String[] args) {
+        System.out.print("Enter the file name: ");
+        String fileName = System.console().readLine();
+        File file = new File(fileName);
+        if (file.exists()) {
+            System.out.println("File is available.");
+            if (file.canRead() && file.canWrite()) {
+                System.out.println("File is both readable and writable.");
+            } else if (file.canRead()) {
+                System.out.println("File is readable but not writable.");
+            } else if (file.canWrite()) {
+                System.out.println("File is writable but not readable.");
+            } else {
+                System.out.println("File is neither readable nor writable.");
+            }
+            if (fileName.lastIndexOf('.') != -1) {
+                String fileType = fileName.substring(fileName.lastIndexOf('.'));
+                System.out.println("File type: " + fileType);
+            } else {
+                System.out.println("File type: Unknown (No extension)");
+            }
+            long fileLength = file.length();
+            System.out.println("File length (bytes): " + fileLength);
+        } else {
+            System.out.println("File does not exist.");
+        }
+    }
+}
+
+
+//3. Character Stream and byte Stream for binary files
+
+import java.io.*;
+
+public class BinaryFileExample {
+    public static void main(String[] args) {
+        String sourceFileName = "source.bin";
+        String copyFileName = "copy.bin";
+
+        try (InputStream byteInputStream = new FileInputStream(sourceFileName);
+             OutputStream byteOutputStream = new FileOutputStream(copyFileName)) {
+
+            int byteRead;
+            while ((byteRead = byteInputStream.read()) != -1) {
+                byteOutputStream.write(byteRead);
+            }
+
+            System.out.println("Binary file copied using Byte Stream");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try (Reader charReader = new FileReader(sourceFileName);
+             Writer charWriter = new FileWriter(copyFileName)) {
+
+            int charRead;
+            while ((charRead = charReader.read()) != -1) {
+                charWriter.write(charRead);
+            }
+
+            System.out.println("Binary file copied using Character Stream");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
